@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -12,4 +12,19 @@
     <style name="TextTitle" parent="TextAppearance.AppCompat.Headline" />
 
     <style name="TextRegular" parent="TextAppearance.AppCompat.Body1" />
+
+    <style name="Widget" parent="@android:style/Widget.Material" />
+
+    <style name="Widget.ActionButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="shapeAppearanceOverlay">@style/Corners4dp</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Corners4dp">
+        <item name="cornerRadius">4dp</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
 </resources>

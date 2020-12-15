@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.asFlow
 import me.fb.ng.ctrl.data.RouterApi
 import okhttp3.ResponseBody
 import java.io.IOException
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,10 +26,12 @@ class WifiAclRepository @Inject constructor(
         val response = routerApi.getWlAclPage(TOKEN)
         val html = response.getBody()
         // Look for devices
-        val reg1 = Regex("wlaclArray\\d+=\"(.*)\"")
+        val reg1 = Regex("wlaclArray(\\d+)=\"(.*)\"")
         val result = reg1.findAll(html)
         val devices = result.map {
-            it.groupValues[1]
+            val id = it.groupValues[1]
+            val (name, mac) = it.groupValues[2].split(" ")
+            DeviceModel(id, name, mac.toUpperCase(Locale.getDefault()))
         }.toList()
         // Look for timestamp
         val reg2 = Regex("var ts='(\\d+)'")

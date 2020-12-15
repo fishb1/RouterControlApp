@@ -18,6 +18,7 @@ class WirelessAclFragment : Fragment() {
 
     private val viewModel: WirelessAclViewModel by viewModels()
     private lateinit var binding: FragmentWirelessAclBinding
+    private lateinit var devicesAdapter: DevicesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +37,9 @@ class WirelessAclFragment : Fragment() {
         view: View,
         savedInstanceState: Bundle?
     ) {
+        devicesAdapter = DevicesAdapter(viewModel)
+        binding.listDevices.adapter = devicesAdapter
+        binding.listDevices.itemAnimator = null
         // Setup toolbar
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -49,6 +53,9 @@ class WirelessAclFragment : Fragment() {
         // Listen to view model events
         viewModel.showMessageEvent.observe(viewLifecycleOwner, Observer { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        })
+        viewModel.deviceList.observe(viewLifecycleOwner, Observer {
+            devicesAdapter.submitList(it)
         })
     }
 

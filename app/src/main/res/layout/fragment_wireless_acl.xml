@@ -46,7 +46,7 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -58,38 +58,48 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/buttonEnable"
                         android:layout_marginStart="@dimen/margin_horizontal_normal"
-                        android:layout_marginEnd="@dimen/margin_horizontal_normal"
+                        android:layout_marginEnd="@dimen/margin_horizontal_small"
                         android:layout_marginTop="@dimen/margin_vertical_single"
                         android:textAppearance="@style/TextTitle"
                         android:text="@string/main_acl_title" />
 
-                    <TextView
-                        android:id="@+id/textAclList"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/textListTitle"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="@dimen/margin_horizontal_normal"
-                        android:layout_marginEnd="@dimen/margin_horizontal_normal"
-                        android:layout_marginTop="@dimen/margin_vertical_single"
-                        android:textAppearance="@style/TextRegular"
-                        tools:text="123123\n12312312\n"
-                        android:text="@{viewModel.acl}" />
-
                     <Button
+                        android:id="@+id/buttonEnable"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/textAclList"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="@dimen/margin_horizontal_normal"
                         android:layout_marginTop="@dimen/margin_vertical_single"
+                        style="@style/Widget.ActionButton"
                         android:onClick="@{() -> viewModel.toggleWifiAccessList()}"
                         android:enabled="@{!viewModel.busy}"
                         android:text="@{viewModel.btnText}"
                         tools:text="Enable" />
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrierTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="buttonEnable, textListTitle" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listDevices"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintTop_toBottomOf="@id/barrierTitle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="@dimen/margin_vertical_single"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:scrollbarStyle="insideOverlay"
+                        android:scrollbars="vertical"
+                        tools:listitem="@layout/item_device"
+                        tools:itemCount="5" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

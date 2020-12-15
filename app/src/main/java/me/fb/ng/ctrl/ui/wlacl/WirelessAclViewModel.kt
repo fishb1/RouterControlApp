@@ -3,6 +3,7 @@ package me.fb.ng.ctrl.ui.wlacl
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
+import me.fb.ng.ctrl.model.DeviceModel
 import me.fb.ng.ctrl.model.WifiAclRepository
 
 /**
@@ -10,14 +11,19 @@ import me.fb.ng.ctrl.model.WifiAclRepository
  */
 class WirelessAclViewModel @ViewModelInject constructor(
     private val repository: WifiAclRepository
-): ViewModel() {
+): ViewModel(), DeviceListDelegate {
 
     private val data = repository.getWifiAclData().asLiveData(viewModelScope.coroutineContext)
     private val aclEnabled: LiveData<Boolean> = data.map {
         it.aclEnabled
     }
-    val acl: LiveData<String> = data.map {
-        it.devices.joinToString("\n")
+    private var selectedDevice: DeviceModel? = null
+    val deviceList = MediatorLiveData<List<DeviceModel>>().apply {
+        addSource(data) {
+            value = it.devices.map { device ->
+                device.copy(selected = device.id == selectedDevice?.id)
+            }
+        }
     }
     val btnText = aclEnabled.map {
         if (it) {
@@ -52,6 +58,13 @@ class WirelessAclViewModel @ViewModelInject constructor(
                 showMessageEvent.value = "Something went wrong! Try again later!"
             }
             busy.postValue(false)
+        }
+    }
+
+    override fun onDeviceSelected(device: DeviceModel?) {
+        selectedDevice = device
+        deviceList.value = deviceList.value?.map {
+            it.copy(selected = it.id == device?.id)
         }
     }
 }
