@@ -7,7 +7,7 @@
 
         <variable
             name="device"
-            type="me.fb.ng.ctrl.model.DeviceModel" />
+            type="me.fb.ng.ctrl.model.common.DeviceModel" />
 
         <variable
             name="delegate"

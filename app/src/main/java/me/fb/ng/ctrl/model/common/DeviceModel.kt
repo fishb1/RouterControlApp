@@ -1,4 +1,4 @@
-package me.fb.ng.ctrl.model
+package me.fb.ng.ctrl.model.common
 
 data class DeviceModel(
     val id: String,

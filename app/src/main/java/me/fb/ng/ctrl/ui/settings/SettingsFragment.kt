@@ -36,4 +36,9 @@ class SettingsFragment : Fragment() {
             activity?.onBackPressed()
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveSettings()
+    }
 }

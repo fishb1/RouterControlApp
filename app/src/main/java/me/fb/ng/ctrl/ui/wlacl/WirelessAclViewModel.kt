@@ -3,8 +3,8 @@ package me.fb.ng.ctrl.ui.wlacl
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import me.fb.ng.ctrl.model.DeviceModel
-import me.fb.ng.ctrl.model.WifiAclRepository
+import me.fb.ng.ctrl.model.common.DeviceModel
+import me.fb.ng.ctrl.model.acl.WifiAclRepository
 
 /**
  * A view model for the control wireless access list screen.

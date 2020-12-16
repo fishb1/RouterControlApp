@@ -53,6 +53,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.routerIp}"
                     android:hint="@string/settings_hint_ip" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -71,6 +72,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.login}"
                     android:hint="@string/settings_hint_login" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -89,6 +91,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.password}"
                     android:hint="@string/settings_hint_pass" />
 
             </com.google.android.material.textfield.TextInputLayout>

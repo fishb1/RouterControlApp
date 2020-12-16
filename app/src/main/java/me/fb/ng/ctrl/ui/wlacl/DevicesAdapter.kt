@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import me.fb.ng.ctrl.databinding.ItemDeviceBinding
-import me.fb.ng.ctrl.model.DeviceModel
+import me.fb.ng.ctrl.model.common.DeviceModel
 
 /**
  * An adapter for a list of devices.
