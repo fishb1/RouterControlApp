@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import me.fb.ng.ctrl.model.common.DeviceModel
 import me.fb.ng.ctrl.model.acl.WifiAclRepository
+import java.util.concurrent.TimeUnit
 
 /**
  * A view model for the control wireless access list screen.
@@ -13,6 +14,10 @@ class WirelessAclViewModel @ViewModelInject constructor(
     private val repository: WifiAclRepository
 ): ViewModel(), DeviceListDelegate {
 
+    companion object {
+        private val DATA_TTL = TimeUnit.SECONDS.toMillis(30)
+    }
+
     private val data = repository.getWifiAclData().asLiveData(viewModelScope.coroutineContext)
     private val aclEnabled: LiveData<Boolean> = data.map {
         it.aclEnabled
@@ -20,9 +25,7 @@ class WirelessAclViewModel @ViewModelInject constructor(
     private var selectedDevice: DeviceModel? = null
     val deviceList = MediatorLiveData<List<DeviceModel>>().apply {
         addSource(data) {
-            value = it.devices.map { device ->
-                device.copy(selected = device.id == selectedDevice?.id)
-            }
+            value = updateSelectedDevice(it.devices, selectedDevice)
         }
     }
     val btnText = aclEnabled.map {
@@ -34,13 +37,17 @@ class WirelessAclViewModel @ViewModelInject constructor(
     }
     val busy = MutableLiveData<Boolean>()
     val showMessageEvent = MutableLiveData<String>()
+    private var lastUpdateTime: Long = 0
 
     fun updateData() = viewModelScope.launch {
         busy.postValue(true)
-        try {
-            repository.updateWifiAclData()
-        } catch (e: Exception) {
-            showMessageEvent.value = "Error updating data: " + e.message
+        if (System.currentTimeMillis() - lastUpdateTime > DATA_TTL) {
+            try {
+                repository.updateWifiAclData()
+                lastUpdateTime = System.currentTimeMillis()
+            } catch (e: Exception) {
+                showMessageEvent.value = "Error updating data: " + e.message
+            }
         }
         busy.postValue(false)
     }
@@ -63,8 +70,15 @@ class WirelessAclViewModel @ViewModelInject constructor(
 
     override fun onDeviceSelected(device: DeviceModel?) {
         selectedDevice = device
-        deviceList.value = deviceList.value?.map {
-            it.copy(selected = it.id == device?.id)
-        }
+        deviceList.value = updateSelectedDevice(deviceList.value, device)
+    }
+
+    private fun updateSelectedDevice(
+        deviceList: List<DeviceModel>?,
+        selectedDevice: DeviceModel?
+    ): List<DeviceModel> {
+        return deviceList?.map {
+            it.copy(selected = it.id == selectedDevice?.id)
+        } ?: emptyList()
     }
 }
