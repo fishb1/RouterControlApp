@@ -2,6 +2,7 @@ package me.fb.ng.ctrl.ui.wlacl
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.fb.ng.ctrl.model.common.DeviceModel
 import me.fb.ng.ctrl.model.acl.WifiAclRepository
@@ -19,20 +20,13 @@ class WirelessAclViewModel @ViewModelInject constructor(
     }
 
     private val data = repository.getWifiAclData().asLiveData(viewModelScope.coroutineContext)
-    private val aclEnabled: LiveData<Boolean> = data.map {
+    val aclEnabled: LiveData<Boolean> = data.map {
         it.aclEnabled
     }
     private var selectedDevice: DeviceModel? = null
     val deviceList = MediatorLiveData<List<DeviceModel>>().apply {
         addSource(data) {
             value = updateSelectedDevice(it.devices, selectedDevice)
-        }
-    }
-    val btnText = aclEnabled.map {
-        if (it) {
-            "Disable"
-        } else {
-            "Enable"
         }
     }
     val busy = MutableLiveData<Boolean>()
@@ -55,14 +49,16 @@ class WirelessAclViewModel @ViewModelInject constructor(
     fun toggleWifiAccessList() {
         viewModelScope.launch {
             busy.postValue(true)
-            val data = data.value ?: return@launch
-            val enabled = data.aclEnabled
-            val timestamp = data.timestamp
-            try {
-                repository.setWifiAclEnabled(!enabled, timestamp)
-                updateData()
-            } catch (e: Exception) {
-                showMessageEvent.value = "Something went wrong! Try again later!"
+            val data = data.value
+            if (data != null) {
+                val enabled = data.aclEnabled
+                val timestamp = data.timestamp
+                try {
+                    repository.setWifiAclEnabled(!enabled, timestamp)
+                    updateData()
+                } catch (e: Exception) {
+                    showMessageEvent.value = "Something went wrong! Try again later!"
+                }
             }
             busy.postValue(false)
         }
@@ -71,6 +67,24 @@ class WirelessAclViewModel @ViewModelInject constructor(
     override fun onDeviceSelected(device: DeviceModel?) {
         selectedDevice = device
         deviceList.value = updateSelectedDevice(deviceList.value, device)
+    }
+
+    override fun deleteDevice(device: DeviceModel) {
+        viewModelScope.launch {
+            busy.postValue(true)
+            val data = data.value
+            if (data != null) {
+                val timestamp = data.timestamp
+                try {
+                    repository.deleteDevice(device, timestamp)
+                    delay(3000)
+                    updateData()
+                } catch (e: Exception) {
+                    showMessageEvent.value = "Something went wrong! Try again later!"
+                }
+            }
+            busy.postValue(false)
+        }
     }
 
     private fun updateSelectedDevice(

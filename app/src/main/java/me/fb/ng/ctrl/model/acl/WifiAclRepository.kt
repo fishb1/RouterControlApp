@@ -3,6 +3,7 @@ package me.fb.ng.ctrl.model.acl
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import me.fb.ng.ctrl.data.RouterApi
+import me.fb.ng.ctrl.model.common.DeviceModel
 import me.fb.ng.ctrl.model.getBasicToken
 import me.fb.ng.ctrl.model.settings.SettingsStorage
 import okhttp3.ResponseBody
@@ -32,7 +33,16 @@ class WifiAclRepository @Inject constructor(
         routerApi.postData(
             token = getBasicToken(settings.login, settings.password),
             action = RouterApi.CONTROL_WIFI_ACCESS_LIST + " timestamp=$timestamp",
-            data = SetWifiAclRequest(enabled)
+            data = WlAclControlRequest(enabled)
+        )
+    }
+
+    suspend fun deleteDevice(device: DeviceModel, timestamp: Long) {
+        val settings = settingsStorage.getSettings()
+        routerApi.postData(
+            token = getBasicToken(settings.login, settings.password),
+            action = RouterApi.CONTROL_WIFI_ACCESS_LIST + " timestamp=$timestamp",
+            data = WlAclDeleteDeviceRequest(device.id)
         )
     }
 

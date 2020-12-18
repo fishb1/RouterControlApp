@@ -17,7 +17,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@{device.selected ? @color/selected : @android:color/transparent}">
+        android:background="@{device.selected ? @android:color/white : @android:color/transparent}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,13 +49,27 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/textName"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnDelete"
                 app:layout_constraintHorizontal_bias="1"
                 android:layout_marginStart="@dimen/margin_horizontal_small"
-                android:layout_marginEnd="@dimen/margin_horizontal_normal"
+                android:layout_marginEnd="@dimen/margin_horizontal_small"
                 android:textAppearance="@style/TextRegular"
                 android:text="@{device.mac}"
                 tools:text="f4:60:e2:cd:f9:6e" />
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="@dimen/margin_horizontal_normal"
+                app:srcCompat="@drawable/ic_delete"
+                android:background="?actionBarItemBackground"
+                android:contentDescription="@string/wl_acl_delete"
+                android:onClick="@{() -> delegate.deleteDevice(device)}"
+                app:goneUnless="@{device.selected}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

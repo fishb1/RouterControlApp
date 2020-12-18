@@ -20,7 +20,7 @@
 
     <style name="TextLabel" parent="TextAppearance.AppCompat.Subhead">
         <item name="android:textColor">@color/colorTextLabel</item>
-        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Widget" parent="@android:style/Widget.Material" />

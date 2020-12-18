@@ -11,7 +11,7 @@
             type="me.fb.ng.ctrl.ui.wlacl.WirelessAclViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorSurface">
@@ -20,9 +20,6 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
@@ -33,85 +30,54 @@
                 app:title="@string/wl_acl_screen_title"
                 app:navigationIcon="@drawable/ic_menu" />
 
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchControl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_horizontal_normal"
+                android:layout_marginEnd="@dimen/margin_horizontal_normal"
+                android:checked="@{viewModel.aclEnabled}"
+                android:onClick="@{() -> viewModel.toggleWifiAccessList()}"
+                android:enabled="@{!viewModel.busy}"
+                android:text="@string/wl_acl_title" />
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toBottomOf="@id/appbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:onRefreshListener="@{() -> viewModel.updateData()}"
             app:refreshing="@{viewModel.busy}" >
 
-            <ScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listDevices"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layoutTools"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
-
-                        <TextView
-                            android:id="@+id/textListTitle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/buttonEnable"
-                            android:layout_marginStart="@dimen/margin_horizontal_normal"
-                            android:layout_marginEnd="@dimen/margin_horizontal_small"
-                            android:textAppearance="@style/TextLabel"
-                            android:text="@string/wl_acl_title" />
-
-                        <Button
-                            android:id="@+id/buttonEnable"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:layout_marginEnd="@dimen/margin_horizontal_normal"
-                            android:layout_marginTop="@dimen/margin_vertical_single"
-                            style="@style/Widget.ActionButton"
-                            android:onClick="@{() -> viewModel.toggleWifiAccessList()}"
-                            android:enabled="@{!viewModel.busy}"
-                            android:text="@{viewModel.btnText}"
-                            tools:text="Enable" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listDevices"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@id/layoutTools"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginTop="@dimen/margin_vertical_single"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        android:scrollbarStyle="insideOverlay"
-                        android:scrollbars="vertical"
-                        tools:listitem="@layout/item_device"
-                        tools:itemCount="5" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </ScrollView>
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/item_device"
+                tools:itemCount="5" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_add"
+            android:layout_marginEnd="@dimen/margin_horizontal_normal"
+            android:layout_marginBottom="@dimen/margin_horizontal_normal" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

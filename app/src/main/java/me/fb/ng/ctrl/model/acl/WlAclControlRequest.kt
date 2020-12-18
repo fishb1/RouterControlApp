@@ -1,6 +1,6 @@
 package me.fb.ng.ctrl.model.acl
 
-class SetWifiAclRequest(
+class WlAclControlRequest(
     enabled: Boolean
 ) : HashMap<String, String>() {
 
