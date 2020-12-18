@@ -18,6 +18,11 @@
 
     <style name="TextRegular" parent="TextAppearance.AppCompat.Body1" />
 
+    <style name="TextLabel" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@color/colorTextLabel</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
     <style name="Widget" parent="@android:style/Widget.Material" />
 
     <style name="Widget.ActionButton" parent="Widget.MaterialComponents.Button.TextButton">
