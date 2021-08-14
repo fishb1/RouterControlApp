@@ -1,17 +1,19 @@
 package me.fb.ng.ctrl.ui.wlacl
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.fb.ng.ctrl.model.common.DeviceModel
 import me.fb.ng.ctrl.model.acl.WifiAclRepository
+import me.fb.ng.ctrl.model.common.DeviceModel
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * A view model for the control wireless access list screen.
  */
-class WirelessAclViewModel @ViewModelInject constructor(
+@HiltViewModel
+class WirelessAclViewModel @Inject constructor(
     private val repository: WifiAclRepository
 ): ViewModel(), DeviceListDelegate {
 

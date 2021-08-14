@@ -1,14 +1,16 @@
 package me.fb.ng.ctrl.ui.settings
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import me.fb.ng.ctrl.model.settings.SettingsModel
 import me.fb.ng.ctrl.model.settings.SettingsRepository
+import javax.inject.Inject
 
-class SettingsViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
     private val settingsRepo: SettingsRepository
 ): ViewModel() {
 
