@@ -1,7 +1,8 @@
 package me.fb.ng.ctrl.model.acl
 
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import me.fb.ng.ctrl.data.RouterApi
 import me.fb.ng.ctrl.model.common.DeviceModel
 import me.fb.ng.ctrl.model.getBasicToken
@@ -17,15 +18,15 @@ class WifiAclRepository @Inject constructor(
     private val settingsStorage: SettingsStorage
 ) {
 
-    private val aclData = ConflatedBroadcastChannel<WifiAclData>()
+    private val aclData = MutableStateFlow<WifiAclData?>(null)
 
-    fun getWifiAclData() = aclData.asFlow()
+    fun getWifiAclData(): Flow<WifiAclData> = aclData.filterNotNull()
 
     suspend fun updateWifiAclData() {
         val settings = settingsStorage.getSettings()
         val token = getBasicToken(settings.login, settings.password)
         val response = routerApi.getWlAclPage(token)
-        aclData.send(WifiAclPageParser.getWifiAclData(response.getBody()))
+        aclData.value = WifiAclPageParser.getWifiAclData(response.getBody())
     }
 
     suspend fun setWifiAclEnabled(enabled: Boolean, timestamp: Long) {
